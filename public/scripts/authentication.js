@@ -23,6 +23,21 @@ const Authentication = (function() {
         //
         // B. Sending the AJAX request to the server
         //
+        fetch("/signin", 
+            {method: "POST", 
+            headers: { "Content-type": "application/json" }, 
+            body: json})
+            .then((res) => res.json())
+            .then((json) => {
+            if(json.status == "success")
+            {
+                console.log("when successful");
+                user = getUser();
+                onSuccess(); // not too sure
+            }else if(onError) onError(json.error)
+
+         })
+        .catch((err) => console.log("error occured in signin"));
 
         //
         // F. Processing any error returned by the server
