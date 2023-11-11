@@ -27,6 +27,7 @@
         <div id="main-panel" class="row">
             <div id="chat-panel" class="col">
                 <div id="chat-area" class="col"></div>
+                <i><div id = "typing-status"></div></i>
                 <form id="chat-input-form" autocomplete="off">
                     <input id="chat-input" placeholder="Enter your message"></input>
                 </form>
@@ -80,17 +81,49 @@
     $(document).ready(function() {
         // Initialize the UI
         UI.initialize();
-
+        
         // Validate the signin
+       /* var textarea = $('#chat-input');
+        var typingStatus = $('#typing-status');
+        var lastTypedTime = new Date(0);
+        var typingDelayMillis = 3000;
+       // var user = $('#user-panel .user-name').val();
+        //console.log("what is the suer: ", user);
+        function refreshTypingStatus() {
+            if (!textarea.is(':focus') || textarea.val() == '' || new Date().getTime() - lastTypedTime.getTime() > typingDelayMillis) {
+                typingStatus.html('');
+            } else {
+                typingStatus.html(user + ' is typing...');
+                io.emit("add message", "some user is typing");
+            }
+        }
+        function updateLastTypedTime() {
+            lastTypedTime = new Date();
+        }
+        setInterval(refreshTypingStatus, 100);
+        textarea.keypress(updateLastTypedTime);
+        textarea.blur(refreshTypingStatus);*/
+        /*$('#chat-input').keypress((e)=>{
+            if(e.which!=13){
+              typing=true
+              socket.emit('typing', {user:user, typing:true})
+              clearTimeout(timeout)
+              timeout=setTimeout(typingTimeout, 3000)
+            }else{
+              clearTimeout(timeout)
+              typingTimeout()
+              //sendMessage() function will be called once the user hits enter
+              sendMessage()
+            }
+          })*/
         Authentication.validate(
             () => {
                 SignInForm.hide();
                 UserPanel.update(Authentication.getUser());
                 UserPanel.show();
-
                 Socket.connect();
             },
-            () => { SignInForm.show(); }
+            () => { SignInForm.show();}
         );
     });
     </script>

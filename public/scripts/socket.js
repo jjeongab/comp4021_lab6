@@ -6,6 +6,7 @@ const Socket = (function() {
     const getSocket = function() {
         return socket;
     };
+    let typinguser = null;
 
     // This function connects the server and initializes the socket
     const connect = function() {
@@ -50,14 +51,20 @@ const Socket = (function() {
 
             // Show the chatroom messages
             ChatPanel.update(chatroom);
+            ChatPanel.update();
         });
-
+ 
         // Set up the add message event
         socket.on("add message", (message) => {
             message = JSON.parse(message);
-
             // Add the message to the chatroom
             ChatPanel.addMessage(message);
+        });
+        socket.on('display', (data)=>{
+            if(data.typing==true)
+              $('#typing-status').text(`${data.user} is typing...`)
+            else
+              $('#typing-status').text("")
         });
     };
 
@@ -73,6 +80,12 @@ const Socket = (function() {
             socket.emit("post message", content);
         }
     };
+    // const typeStatus = function(typinguser)
+    // {
+    //     if(socket && socket.connected) {
+    //         socket.emit("typing", typinguser);
+    //     }
+    // }
 
-    return { getSocket, connect, disconnect, postMessage };
+    return { getSocket, connect, disconnect, postMessage};
 })();

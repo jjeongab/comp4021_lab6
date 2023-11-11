@@ -1,3 +1,8 @@
+let typinguser = null;
+var socket = io();
+var typing=false;
+var timeout=3000;
+// var user;
 const SignInForm = (function() {
     // This function initializes the UI
     const initialize = function() {
@@ -15,7 +20,7 @@ const SignInForm = (function() {
             // Get the input fields
             const username = $("#signin-username").val().trim();
             const password = $("#signin-password").val().trim();
-
+            typinguser = username;
             // Send a signin request
             Authentication.signin(username, password,
                 () => {
@@ -177,23 +182,57 @@ const OnlineUsersPanel = (function() {
 const ChatPanel = (function() {
 	// This stores the chat area
     let chatArea = null;
-
+    var textarea = $('#chat-input');
+    var typingStatus = $('#typing-status');
+    var lastTypedTime = new Date(0);
+    var typingDelayMillis = 3000;
     // This function initializes the UI
+    // console.log("typingonline:", typinguser);
+    // const refreshTypingStatus = function() {
+    //     if (!textarea.is(':focus') || textarea.val() == '' || new Date().getTime() - lastTypedTime.getTime() > typingDelayMillis) {
+    //         typing = false;
+    //         socket.emit('typing', {user: typinguser, typing:false});
+    //     } else {
+    //         typing=true;
+    //         socket.emit('typing', {user: typinguser, typing:true});
+    //     }
+    // }
+    const updateLastTypedTime = function() {
+        lastTypedTime = new Date();
+    }
     const initialize = function() {
 		// Set up the chat area
 		chatArea = $("#chat-area");
-
+        // setInterval(refreshTypingStatus, 100);
+        // textarea.keypress(updateLastTypedTime);
+        // textarea.blur(refreshTypingStatus);
+        // checking the typing status 
         // Submit event for the input form
+        function typingTimeout(){
+            typing=false
+            socket.emit('typing', {user:typinguser, typing:false})
+        }        
+        $('#chat-input').keypress((e)=>{
+            if(e.which!=13){
+              typing=true;
+              socket.emit('typing', {user: typinguser, typing:true});
+              clearTimeout(timeout);
+              timeout=setTimeout(typingTimeout, 3000);
+            }else{
+              clearTimeout(timeout);
+              typingTimeout();
+              //sendMessage() function will be called once the user hits enter
+            //   sendMessage();
+            }
+          });
         $("#chat-input-form").on("submit", (e) => {
             // Do not submit the form
             e.preventDefault();
 
             // Get the message content
             const content = $("#chat-input").val().trim();
-
             // Post it
             Socket.postMessage(content);
-
 			// Clear the message
             $("#chat-input").val("");
         });

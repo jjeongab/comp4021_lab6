@@ -13,5 +13,20 @@
     "avatar": "Hamster",
     "name": "jinhong",
     "password": "$2b$10$OzMwOI3oe8F20bIKhImnw.SD7YMu2b2AICt5PMT/vrWK74ucP5jSe"
+  },
+  "er": {
+    "avatar": "Rabbit Face",
+    "name": "fds",
+    "password": "$2b$10$X6zZGDxUMpG8p92EhwiRLOvXeOW99lH4JcIts3VzI6QGr5TCmRFT2"
+  },
+  "so": {
+    "avatar": "Rabbit",
+    "name": "fe",
+    "password": "$2b$10$xKxYgBQXq0nHEyvG3kuj5OvtioRQSzoAzS0l8VCx4W78WekRH2JYG"
+  },
+  "hey": {
+    "avatar": "Hamster",
+    "name": "fel",
+    "password": "$2b$10$T0azwDu564pUFRF1UXX9f.Y/KNc1Wf3mfUU4EfA1zGmEy1/P0H47u"
   }
 }

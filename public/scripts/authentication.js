@@ -31,11 +31,10 @@ const Authentication = (function() {
             .then((json) => {
             if(json.status == "success")
             {
-                user = {username, password};
-                onSuccess(); // not too sure
+                user = json.user;
+                if(onSuccess)onSuccess("Succeeded signing in ");         
             }else if(onError) onError(json.error)
-
-         })
+        })
         .catch((err) => console.log("error occured in signin"));
 
         //
@@ -46,7 +45,7 @@ const Authentication = (function() {
         // H. Handling the success response from the server
         //
         // Delete when appropriate
-        if (onError) onError("This function is not yet implemented.");
+        // if (onError) onError("This function is not yet implemented.");
     };
 
     // This function sends a validate request to the server
@@ -64,11 +63,12 @@ const Authentication = (function() {
         .then((json) => {
             if(json.status == "success")
             {
+                console.log("validate successful");
                 if(onSuccess) onSuccess(); // not too sure
             }else if(onError) onError(json.error)
 
          })
-        .catch((err) => onError(err));
+        .catch((err) => onError("Validate function has error."));
         //
         // C. Processing any error returned by the server
         //
@@ -78,7 +78,7 @@ const Authentication = (function() {
         //
 
         // Delete when appropriate
-        if (onError) onError("This function is not yet implemented.");
+        // if (onError) onError("This function is not yet implemented.");
     };
 
     // This function sends a sign-out request to the server
@@ -87,17 +87,19 @@ const Authentication = (function() {
     // * `onError`   - This is a callback function to be called when the
     //                 request fails in this form `onError(error)`
     const signout = function(onSuccess, onError) {
-        fetch('/signout')
+        fetch("/signout")
         .then((res) => res.json())
         .then((json) =>{
             if(json.status == "success"){
+                // user = null;
+                console.log("succeded signing out");
                 user = null;
                 if(onSuccess) onSuccess();
             }
-            else if(onError) onError(json.error);
+            else if(onError) onError("Sign out function has the error.");
         })
         // Delete when appropriate
-        if (onError) onError("This function is not yet implemented.");
+        if (onError) onError("Signout function function is not yet implemented.");
     };
 
     return { getUser, signin, validate, signout };
