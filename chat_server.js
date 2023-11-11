@@ -159,10 +159,7 @@ io.use((socket, next) =>{
     chatSession(socket.request, {}, next);
 });
 //javascript object st{oring the online users
-const onlineUsers = {
-    "tony": { avatar: "Owl",    name: "Tony Lee" },
-    "may":  { avatar: "Rabbit", name: "May Wong" }
-};
+const onlineUsers = {};
 io.on("connection", (socket) =>{ // adding a newuser to onlineUsers list 
     let username = null;
     let avatar = null;
@@ -186,31 +183,35 @@ io.on("connection", (socket) =>{ // adding a newuser to onlineUsers list
         console.log("onlineUsers:", onlineUsers);
         // io.emit("add user", JSON.stringify(onlineUsers[username]));
         // const user = JSON.stringify(onlineUsers[username]);
-        io.emit("add user", JSON.stringify(onlineUsers[username]));
+        io.emit("add user",JSON.stringify({username, avatar, name}));
         // console.log(onlineUsers);
     }
     socket.on("disconnect", () => 
     {
-        const obj = socket.request.session.user;
         // console.log("obj", obj);
         // username = obj.username;
         // avatar = obj.avatar;
         // name = obj.name;
-        const user = JSON.stringify(onlineUsers[username]);
+        // const user = JSON.stringify(onlineUsers[username]);
+        const obj = socket.request.session.user;
+        // console.log("obj", obj);
+        username = obj.username;
+        avatar = obj.avatar;
+        name = obj.name;
         delete onlineUsers[username];
-        io.emit("remove user",user);
+        io.emit("remove user", JSON.stringify({username, avatar, name}));
     });
     socket.on("get users", () =>
     {
         // const data = JSON.stringify(onlineUsers); // data need to be stringify
-        io.emit("users",JSON.stringify(onlineUsers));
+        socket.emit("users",JSON.stringify(onlineUsers));
         // io.emit("users", data);
     });
     socket.on("get messages", () =>
     {
         const chatroom = fs.readFileSync("data/chatroom.json", "utf-8"); // read an JSOn file to Javascript object 
         // console.log("chatroom get messages:", JSON.stringify(chatroom))
-        socket.emit("messages",chatroom);
+        socket.emit("messages",JSON.stringify(chatroom));
         // for(let key in chatroom)
         // {
         //     if(chatroom.hasOwnProperty(key))

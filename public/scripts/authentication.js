@@ -33,7 +33,7 @@ const Authentication = (function() {
             {
                 user = json.user;
                 if(onSuccess)onSuccess("Succeeded signing in ");         
-            }else if(onError) onError(json.error)
+            }else if(onError) onError()
         })
         .catch((err) => console.log("error occured in signin"));
 

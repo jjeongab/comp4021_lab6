@@ -20,7 +20,6 @@ const SignInForm = (function() {
             // Get the input fields
             const username = $("#signin-username").val().trim();
             const password = $("#signin-password").val().trim();
-            typinguser = username;
             // Send a signin request
             Authentication.signin(username, password,
                 () => {
@@ -114,6 +113,7 @@ const UserPanel = (function() {
         if (user) {
             $("#user-panel .user-avatar").html(Avatar.getCode(user.avatar));
             $("#user-panel .user-name").text(user.name);
+            typinguser = user.name;
         }
         else {
             $("#user-panel .user-avatar").html("");
