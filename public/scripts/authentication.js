@@ -19,7 +19,7 @@ const Authentication = (function() {
         //
         // A. Preparing the user data
         //
- 
+        const json = JSON.stringify({username, password});
         //
         // B. Sending the AJAX request to the server
         //
@@ -31,8 +31,7 @@ const Authentication = (function() {
             .then((json) => {
             if(json.status == "success")
             {
-                console.log("when successful");
-                user = getUser();
+                user = {username, password};
                 onSuccess(); // not too sure
             }else if(onError) onError(json.error)
 
@@ -46,7 +45,6 @@ const Authentication = (function() {
         //
         // H. Handling the success response from the server
         //
-
         // Delete when appropriate
         if (onError) onError("This function is not yet implemented.");
     };
@@ -61,7 +59,16 @@ const Authentication = (function() {
         //
         // A. Sending the AJAX request to the server
         //
+        fetch("/validate")
+        .then((res) => res.json())
+        .then((json) => {
+            if(json.status == "success")
+            {
+                if(onSuccess) onSuccess(); // not too sure
+            }else if(onError) onError(json.error)
 
+         })
+        .catch((err) => onError(err));
         //
         // C. Processing any error returned by the server
         //
@@ -80,7 +87,15 @@ const Authentication = (function() {
     // * `onError`   - This is a callback function to be called when the
     //                 request fails in this form `onError(error)`
     const signout = function(onSuccess, onError) {
-
+        fetch('/signout')
+        .then((res) => res.json())
+        .then((json) =>{
+            if(json.status == "success"){
+                user = null;
+                if(onSuccess) onSuccess();
+            }
+            else if(onError) onError(json.error);
+        })
         // Delete when appropriate
         if (onError) onError("This function is not yet implemented.");
     };

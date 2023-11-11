@@ -13,11 +13,24 @@ const Registration = (function() {
         //
         // A. Preparing the user data
         //
+        const json = JSON.stringify({username, avatar, name, password});
  
         //
         // B. Sending the AJAX request to the server
         //
+        fetch("/register", 
+            {method: "POST", 
+            headers: { "Content-type": "application/json" }, 
+            body: json})
+            .then((res) => res.json())
+            .then((json) => {
+            if(json.status == "success")
+            {
+                onSuccess(); // not too sure
+            }else if(onError) onError(json.error)
 
+         })
+        .catch((err) => console.log("error trying to register"));
         //
         // F. Processing any error returned by the server
         //
@@ -25,9 +38,8 @@ const Registration = (function() {
         //
         // J. Handling the success response from the server
         //
- 
         // Delete when appropriate
-        if (onError) onError("This function is not yet implemented.");
+        if (onError) onError("Please fill out all of the blanks.");
     };
 
     return { register };
